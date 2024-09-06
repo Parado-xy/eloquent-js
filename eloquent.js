@@ -360,6 +360,7 @@ function countChar(string, char) {
 }
 
 
+let arr = ['pin','min']
 
 
 module.exports = {
