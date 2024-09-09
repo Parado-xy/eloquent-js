@@ -360,9 +360,163 @@ function countChar(string, char) {
 }
 
 
-let arr = ['pin','min']
+/**
+ * Generates an array of numbers starting from `start` to `stop` (inclusive) with a specified `step`.
+ *
+ * @param {number} [start=0] - The starting number of the sequence.
+ * @param {number} stop - The ending number of the sequence.
+ * @param {number} [step=1] - The difference between each number in the sequence.
+ * @returns {number[]} An array of numbers from `start` to `stop` with increments of `step`.
+ *
+ * @example
+ * range(1, 5); // [1, 2, 3, 4, 5]
+ * @example
+ * range(0, 10, 2); // [0, 2, 4, 6, 8, 10]
+ * @example
+ * range(5, 1, -1); // [5, 4, 3, 2, 1]
+ */
+function range(start = 0, stop, step = 1) {
+  let result = [];
+  for (let i = start; i <= stop; i += step) {
+    result.push(i);
+  }
+  return result;
+}
 
+/**
+ * Calculates the sum of all elements in an array.
+ *
+ * @param {number[]} arr - An array of numbers.
+ * @returns {number} The sum of all numbers in the array.
+ *
+ * @example
+ * sum([1, 2, 3, 4, 5]); // 15
+ * @example
+ * sum([10, -2, 3.5]); // 11.5
+ */
+function sum(arr) {
+  let result = 0;
+  for (let value of arr) {
+    result += value;
+  }
+  return result;
+}
+
+/**
+ * Reverses the elements of an array and returns a new array.
+ *
+ * @param {Array} arr - The array to be reversed.
+ * @returns {Array} - A new array with the elements of `arr` in reverse order.
+ */
+function reverseArray(arr) {
+  // Initialize an empty array to hold the reversed elements
+  let newArr = [];
+  
+  // Loop through the input array from the last element to the first
+  for (let i = arr.length - 1; i >= 0; i--) {
+    // Push the current element to the new array
+    newArr.push(arr[i]);
+  }
+  
+  // Return the new array with reversed elements
+  return newArr;
+}
+
+
+/**
+ * Reverses the elements of an array in place.
+ *
+ * @param {Array} arr - The array to be reversed.
+ * @returns {Array} - The original array with its elements reversed.
+ */
+function reverseArrayInPlace(arr) {
+  // Note that When the array has an odd number of elements, 
+  // the middle element remains in its position because the swapping process only 
+  // affects the elements before and after it. 
+  // This ensures that the function works correctly for arrays of any length.
+
+  // Loop through the first half of the array
+  for (let i = 0; i < Math.floor(arr.length / 2); i++) {
+    // Swap the current element with the corresponding element from the end
+    let val1 = arr[arr.length - 1 - i];
+    let val2 = arr[i];
+    arr[i] = val1;
+    arr[arr.length - 1 - i] = val2;
+  }
+  
+  // Return the modified array
+  return arr;
+}
+
+
+function arrayToList_1(arr, next = 0){
+  // Base Case. 
+  if(arr[next] == undefined){
+    return null
+  }else{
+    return {
+      value : arr[next],
+      rest  : arrayToList_1(arr, next+= 1)
+    }
+  }
+}
+
+/**
+ * Converts an array to a linked list.
+ *
+ * @param {Array} arr - The array to be converted.
+ * @param {number} [count=0] - The current index in the array (default is 0).
+ * @returns {Object|null} - The linked list created from the array.
+ *
+ * This function works by recursively creating nodes for each element in the array.
+ * Each node contains a value and a reference to the next node, forming a linked list.
+ * The recursion stops when the end of the array is reached, returning null to signify
+ * the end of the list.
+ */
+function arrayToList(arr, count = 0) {
+  // Base case: if the current index is beyond the last element
+  if (count >= arr.length) {
+    // Return null to signify the end of the list
+    return null;
+  } else {
+    // Create a node with the current element and a reference to the next node
+    return {
+      value: arr[count],
+      rest: arrayToList(arr, count + 1)
+    };
+  }
+}
+
+/**
+ * Converts a linked list to an array.
+ *
+ * @param {Object} list - The linked list to be converted.
+ * @param {Array} [arr=[]] - The array to store the values (default is an empty array).
+ * @returns {Array} - The array containing all the values from the linked list.
+ *
+ * This function works by recursively traversing the linked list and pushing each value
+ * to the same array. Since the array is passed by reference, all modifications are made
+ * to the same array, which is returned at the end.
+ */
+function listToArray(list, arr = []) {
+  // Base case: if the current node is the last node
+  if (list.rest == null) {
+    // Push the value of the last node to the array
+    arr.push(list.value);
+  } else {
+    // Push the current node's value to the array
+    arr.push(list.value);
+    // Recursively call listToArray with the next node and the same array
+    listToArray(list.rest, arr);
+  }
+  // Return the array containing all the values from the linked list
+  return arr;
+}
+
+
+console.log(listToArray(arrayToList([1,2,3,4,5,6])))
 
 module.exports = {
-  roundTo, twoSum, min, isEven, abs, countChar
+  roundTo, twoSum, min, isEven, abs, countChar, sum, range, reverseArray, reverseArrayInPlace, 
+  arrayToList, listToArray
 }
