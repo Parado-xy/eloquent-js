@@ -691,8 +691,8 @@ function maximumSubArray(arr, k){
 }
 
 
-console.log(maximumSubArray([1,2,3,4,5,45,6,7,8,34], 2))
+
 module.exports = {
   roundTo, twoSum, min, isEven, abs, countChar, sum, range, reverseArray, reverseArrayInPlace, 
-  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray
+  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray, binarySearch
 }
