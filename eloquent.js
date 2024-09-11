@@ -448,6 +448,26 @@ function reverseArrayInPlace(arr) {
   return arr;
 }
 
+  // *******************************************************
+  // LinkedList =  Nodes are in 2 parts (data + address)
+  //                        Nodes are in non-consecutive memory locations
+  //                        Elements are linked using pointers
+            
+  //    advantages?
+  //    1. Dynamic Data Structure (allocates needed memory while running)
+  //    2. Insertion and Deletion of Nodes is easy. O(1) 
+  //    3. No/Low memory waste
+  
+  //    disadvantages?
+  //    1. Greater memory usage (additional pointer)
+  //    2. No random access of elements (no index [i])
+  //    3. Accessing/searching elements is more time consuming. O(n)
+  
+  //    uses?
+  //    1. implement Stacks/Queues
+  //    2. GPS navigation
+  //    3. music playlist
+  // *******************************************************
 
 function arrayToList_1(arr, next = 0){
   // Base Case. 
@@ -513,10 +533,166 @@ function listToArray(list, arr = []) {
   return arr;
 }
 
+/**
+ * Determines if a string has all unique characters.
+ * Case-insensitive: treats 'A' and 'a' as the same character.
+ * 
+ * @param {string} str - The input string to check for uniqueness.
+ * @returns {boolean} - Returns true if all characters in the string are unique, false otherwise.
+ */
+function isUnique(str) {
+  // Create an object to store character counts
+  let count = {};
+  
+  // Loop through the string, checking if each character has appeared before
+  for (let i = 0; i < str.length; i++) {
+    let char = str[i].toLowerCase(); // Convert character to lowercase for case-insensitivity
+    
+    // If the character has already been encountered, return false
+    if (count.hasOwnProperty(char)) {
+      return false;
+    }
+    
+    // Otherwise, mark this character as encountered
+    count[char] = 1;
+  }
 
-console.log(listToArray(arrayToList([1,2,3,4,5,6])))
+  // If no duplicate characters were found, return true
+  return true;
+}
 
+/**
+ * Determines if one string is a permutation of another string.
+ * A permutation means the two strings contain the same characters with the same frequency, in any order.
+ * 
+ * @param {string} a - The first string to compare.
+ * @param {string} b - The second string to compare.
+ * @returns {boolean} - Returns true if string 'a' is a permutation of string 'b', false otherwise.
+ */
+function isPermutation(a, b) {
+  // First, check if the lengths of the two strings are equal
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  // Create a hash map to store character counts from string 'a'
+  let hash1 = {};
+
+  // Populate hash1 with the frequency of each character in string 'a'
+  for (let char of a) {
+    char = char.toLowerCase(); // Convert to lowercase to ensure case-insensitivity
+    // Increment the count if the character already exists, else initialize it
+    hash1[char] = (hash1[char] || 0) + 1;
+  }
+
+  // Iterate through string 'b' and adjust the character counts in hash1
+  for (let char of b) {
+    char = char.toLowerCase(); // Case-insensitive comparison
+
+    // If the character in 'b' is not found in 'a', or its count is already zero, return false
+    if (!hash1[char]) {
+      return false;
+    }
+
+    // Decrement the character count
+    hash1[char]--;
+  }
+
+  // Check that all character counts have been reduced to zero
+  // This confirms that the two strings have matching character frequencies
+  return Object.values(hash1).every(count => count === 0);
+}
+
+/**
+ * Performs a binary search on a sorted array to find the target value.
+ * 
+ * @param {number[]} arr - The sorted array of numbers to search through.
+ * @param {number} target - The target value to find in the array.
+ * @returns {number|null} - The index of the target if found, otherwise returns null.
+ */
+function binarySearch(arr, target) {
+  let low = 0;                   // The lowest index of the search range
+  let high = arr.length - 1;      // The highest index of the search range
+
+  // Continue searching while the range is valid
+  while (low <= high) {
+    // Find the middle index
+    let mid = Math.floor((low + high) / 2);
+
+    // If the target is found, return the index
+    if (arr[mid] == target) {
+      return mid;
+    }
+    // If the target is greater, search the right half of the array
+    else if (arr[mid] < target) {
+      low = mid + 1;
+    }
+    // If the target is smaller, search the left half of the array
+    else {
+      high = mid - 1;
+    }
+  }
+
+  // If the target is not found, return null
+  return null;
+}
+
+
+function flatten(matrix){
+ return matrix.reduce((a,b)=> a.concat(b))
+}
+
+/**
+ * Finds the subarray of length `k` that has the maximum sum in the given array.
+ * 
+ * @param {number[]} arr - The input array of numbers.
+ * @param {number} k - The size of the subarray window.
+ * @returns {number[]} - The indices `[start, end]` of the subarray with the maximum sum.
+ *                        If no valid subarray is found (e.g., if `k` is greater than the array length),
+ *                        the function returns `undefined`.
+ * 
+ * @example
+ * // Example usage:
+ * const arr = [1, 2, 3, 4, 5, 6, 7];
+ * const k = 3;
+ * const result = maximumSubArray(arr, k); // Returns [4, 6] (sum: 18 for [5, 6, 7])
+ */
+function maximumSubArray(arr, k){
+  let pointer1 = 0;
+  let pointer2 = k;
+  let sum = 0; // To store the current sum.
+  let maxSum = 0;  // To store the maximum sum encountered
+  let hash = {};
+
+  // Calculate the sum of the initial window
+  for(let i = 0; i < k; i++){
+    sum += arr[i];
+  }
+
+  maxSum = sum;  // Initialize maxSum with the initial window sum
+  hash['sum'] = [0, k - 1];  // Store the initial window indices
+
+  // Slide the window across the array
+  while(pointer2 < arr.length){
+    let sum2 = sum - arr[pointer1] + arr[pointer2];  // Update the sum for the new window
+
+    // Check if the new window sum is greater than the current maxSum
+    if(sum2 > maxSum) {
+      maxSum = sum2;
+      hash['sum'] = [pointer1 + 1, pointer2];  // Update with the new window indices
+    }
+
+    sum = sum2;  // Update sum to the new window's sum
+    pointer1++;  // Move pointers one step forward.
+    pointer2++;
+  }
+
+  return hash['sum'];  // Return the indices of the window with the maximum sum
+}
+
+
+console.log(maximumSubArray([1,2,3,4,5,45,6,7,8,34], 2))
 module.exports = {
   roundTo, twoSum, min, isEven, abs, countChar, sum, range, reverseArray, reverseArrayInPlace, 
-  arrayToList, listToArray
+  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray
 }
