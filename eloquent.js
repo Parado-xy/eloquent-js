@@ -364,7 +364,7 @@ function countChar(string, char) {
  * Generates an array of numbers starting from `start` to `stop` (inclusive) with a specified `step`.
  *
  * @param {number} [start=0] - The starting number of the sequence.
- * @param {number} stop - The ending number of the sequence.
+ * @param {number} end - The ending number of the sequence.
  * @param {number} [step=1] - The difference between each number in the sequence.
  * @returns {number[]} An array of numbers from `start` to `stop` with increments of `step`.
  *
@@ -375,9 +375,9 @@ function countChar(string, char) {
  * @example
  * range(5, 1, -1); // [5, 4, 3, 2, 1]
  */
-function range(start = 0, stop, step = 1) {
+function range(start = 0, end, step = 1) {
   let result = [];
-  for (let i = start; i <= stop; i += step) {
+  for (let i = start; i <= end; i += step) {
     result.push(i);
   }
   return result;
@@ -691,8 +691,56 @@ function maximumSubArray(arr, k){
 }
 
 
+/**
+ * Removes duplicate values from a sorted linked list.
+ *
+ * Given a linked list where elements are sorted in ascending order, this function removes duplicate
+ * elements such that each element appears only once in the list. It modifies the list in-place and 
+ * returns the modified list.
+ *
+ * @param {Object} linkedList - The head node of a sorted linked list.
+ * @param {any} linkedList.value - The value of the current node.
+ * @param {Object|null} linkedList.rest - The reference to the next node in the list, or null if it's the end.
+ * @returns {Object} - The head of the modified linked list with duplicates removed.
+ *
+ * @example
+ * // Example of a linked list: { value: 1, rest: { value: 1, rest: { value: 2, rest: null }}}
+ * const linkedList = { value: 1, rest: { value: 1, rest: { value: 2, rest: null }}};
+ * const result = removeDuplicateInLinkedList(linkedList);
+ * // result will be { value: 1, rest: { value: 2, rest: null }}
+ */
+function removeDuplicateInLinkedList(linkedList) {
+  // Recursive function to traverse and remove duplicates
+  function search(prev, current) {
+    if (current == null) {
+      return; // Base case: end of the list
+    }
 
+    // If the current node is a duplicate of the previous node
+    if (prev.value == current.value) {
+      prev.rest = current.rest; // Skip the current node
+      search(prev, current.rest); // Continue from the next node
+    } else {
+      search(current, current.rest); // Move to the next node
+    }
+  }
+
+  // If the list is empty or has only one element, return it as is
+  if (linkedList == null || linkedList.rest == null) {
+    return linkedList;
+  }
+
+  // Start the search from the head of the list
+  search(linkedList, linkedList.rest);
+
+  // Return the modified list
+  return linkedList;
+}
+
+
+
+console.log(listToArray(removeDuplicateInLinkedList(arrayToList([2,3,3,4,5,5,6,6,6,8]))))
 module.exports = {
   roundTo, twoSum, min, isEven, abs, countChar, sum, range, reverseArray, reverseArrayInPlace, 
-  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray, binarySearch
+  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray, binarySearch, removeDuplicateInLinkedList
 }
