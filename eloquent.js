@@ -738,9 +738,93 @@ function removeDuplicateInLinkedList(linkedList) {
 }
 
 
+/**
+ * Class representing a 2D vector.
+ */
+class Vector {
+  /**
+   * Create a vector.
+   * @param {number} x - The x-coordinate.
+   * @param {number} y - The y-coordinate.
+   */
+  constructor(x, y) {
+    /**
+     * The x-coordinate of the vector.
+     * @type {number}
+     */
+    this.x = x;
 
-console.log(listToArray(removeDuplicateInLinkedList(arrayToList([2,3,3,4,5,5,6,6,6,8]))))
+    /**
+     * The y-coordinate of the vector.
+     * @type {number}
+     */
+    this.y = y;
+  }
+
+  /**
+   * Add another vector to this vector.
+   * @param {Vector} vector - The vector to add.
+   */
+  add(vector) {
+    this.x += vector.x;
+    this.y += vector.y;
+  }
+
+  /**
+   * Subtract another vector from this vector.
+   * @param {Vector} vector - The vector to subtract.
+   */
+  subtract(vector) {
+    this.x -= vector.x;
+    this.y -= vector.y;
+  }
+
+  /**
+   * Get the length (magnitude) of the vector.
+   * @type {number}
+   * @readonly
+   */
+  get length() {
+    return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
+}
+
+class Group{
+    constructor(){
+      this.container = []
+    }
+
+    add(element){
+      if (!this.container.includes(element)){
+        this.container.push(element)
+      }
+    }
+
+    delete(element){
+      let index = this.container.indexOf(element)
+      if( index != -1){
+          this.container.splice(index,1)
+      }
+    }
+
+    has(element){
+      return this.container.includes(element)
+    }
+
+    static from(array){
+      let group = new Group()
+      for(let i = 0; i < array.length; i++){
+        group.add(array[i])
+      }
+
+      return group
+    }
+}
+
+
+
 module.exports = {
   roundTo, twoSum, min, isEven, abs, countChar, sum, range, reverseArray, reverseArrayInPlace, 
-  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray, binarySearch, removeDuplicateInLinkedList
+  arrayToList, listToArray, isUnique, isPermutation, maximumSubArray, binarySearch, removeDuplicateInLinkedList,
+  Vector
 }
